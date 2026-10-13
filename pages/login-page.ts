@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test";
 import { Page } from "@playwright/test";
+import { NewUser } from "../utils/test-data";
 
 
 export class LoginPage {
@@ -8,45 +8,40 @@ export class LoginPage {
     this.page = page;
   }
 
+  async goto(){
+    await this.page.goto('/login')
+  }
+
   async loginToYourAccount(email:string,pass:string){
-    await this.page.getByPlaceholder('Email Address').first().fill(email)
-    await this.page.getByPlaceholder('Password').fill(pass)
-    await this.page.getByRole('button', {name:'Login'}).click()
+    await this.page.getByTestId('login-email').fill(email)
+    await this.page.getByTestId('login-password').fill(pass)
+    await this.page.getByTestId('login-button').click()
   }
 
   async NewUserSignUp(name:string,email:string){
-
-    await this.page.getByPlaceholder('Name').fill(name)
-    await this.page.getByPlaceholder('Email Address').nth(1).fill(email)
-    await this.page.getByRole('button', {name:'SignUp'}).click()
+    await this.page.getByTestId('signup-name').fill(name)
+    await this.page.getByTestId('signup-email').fill(email)
+    await this.page.getByTestId('signup-button').click()
   }
 
-  async FillNewUserInfo(page:Page, randomName:string){
-    const { faker } = await import('@faker-js/faker');
+  async FillNewUserInfo(user:NewUser){
+    await this.page.getByRole('radio', { name: 'Mrs.' }).check();
+    await this.page.getByRole('textbox', { name: 'Name *', exact: true }).fill(user.name);
+    await this.page.getByRole('textbox', { name: 'Password *' }).fill(user.password)
+    await this.page.locator('#days').selectOption('15');
+    await this.page.locator('#months').selectOption('6');
+    await this.page.locator('#years').selectOption('2000');
+    await this.page.getByRole('checkbox', { name: 'Sign up for our newsletter!' }).check();
+    await this.page.getByRole('checkbox', { name: 'Receive special offers from' }).check();
 
-    const randomPass = faker.internet.password();
-    const randomNumber = faker.number.int({ min: 1 , max:31});
-    const randomMonth = faker.number.int({ min: 1 , max:12});
-    const randomYear = faker.date.birthdate({ min: 18, max: 80, mode: 'age' });
-    await page.getByRole('radio', { name: 'Mrs.' }).check();
-    await page.getByRole('textbox', { name: 'Name *', exact: true }).fill(randomName);
-    await page.getByRole('textbox', { name: 'Password *' }).fill(randomPass)
-    await page.locator('#days').selectOption(String(randomNumber));
-    await page.locator('#months').selectOption(String(randomMonth));
-    await page.locator('#years').selectOption('2000');
-    await page.getByRole('checkbox', { name: 'Sign up for our newsletter!' }).check();
-    await page.getByRole('checkbox', { name: 'Receive special offers from' }).check();
-
-    await page.getByRole('textbox', { name: 'First name' }).fill(randomName);
-    await page.getByRole('textbox', { name: 'Last name' }).fill(randomName);
-    await page.getByRole('textbox', { name: 'Address' }).first().fill(String(faker.location.city()));
-    await page.getByLabel('Country').selectOption('Canada');
-    await page.getByRole('textbox', { name: 'State *' }).fill(String(faker.location.city()));
-    await page.getByRole('textbox', { name: 'City' }).fill(String(faker.location.city()));
-    await page.locator('#zipcode').fill('0000');
-    await page.getByRole('textbox', { name: 'Mobile Number *' }).fill(String(faker.phone.number()));
-    await page.getByRole('button', { name: 'Create Account' }).click();
-
-    return randomPass;
+    await this.page.getByRole('textbox', { name: 'First name' }).fill(user.firstName);
+    await this.page.getByRole('textbox', { name: 'Last name' }).fill(user.lastName);
+    await this.page.getByRole('textbox', { name: 'Address' }).first().fill(user.address);
+    await this.page.getByLabel('Country').selectOption('Canada');
+    await this.page.getByRole('textbox', { name: 'State *' }).fill(user.state);
+    await this.page.getByRole('textbox', { name: 'City' }).fill(user.city);
+    await this.page.locator('#zipcode').fill(user.zipcode);
+    await this.page.getByRole('textbox', { name: 'Mobile Number *' }).fill(user.mobile);
+    await this.page.getByRole('button', { name: 'Create Account' }).click();
   }
 }
