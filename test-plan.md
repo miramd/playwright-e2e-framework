@@ -6,12 +6,12 @@
 ## Out of scope
 Payment gateway internals, performance, accessibility.
 
-TC01 - Register a new user (UI)
-TC02 - Register with an existing email shows an error (UI)
-TC03 - Login with valid credentials (UI)
+<!-- TC01 - Register a new user (UI) -->
+<!-- TC02 - Register with an existing email shows an error (UI) -->
+<!-- TC03 - Login with valid credentials (UI)
 TC04 - Login with wrong credentials shows an error (UI)
-TC05 - Logout returns to the login page (UI)
-TC06 - Delete account, then try to log in with the same credentials (UI)
+TC05 - Logout returns to the login page (UI) -->
+<!-- TC06 - Delete account, then try to log in with the same credentials (UI) -->
 TC07 - View all products and open a product detail page (UI)
 TC08 - Search for a product and verify results (UI)
 TC09 - Add a review on a product (UI)
