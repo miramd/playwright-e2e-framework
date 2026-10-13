@@ -4,6 +4,12 @@ import { generateUser } from '../utils/test-data'
 type TestUser = { name: string; email: string; password: string }
 
 export const test = base.extend<{ apiUser: TestUser }>({
+ 
+  // runs for every test that uses `page`
+  page: async ({ page }, use) => {
+    await page.route(/googlesyndication|doubleclick|googleadservices|adservice\.google/, route => route.abort())
+    await use(page)
+  },
   apiUser: async ({ request }, use) => {
     const u = generateUser()
 
