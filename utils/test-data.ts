@@ -30,4 +30,3 @@ export function generateUser(): NewUser {
     mobile: faker.string.numeric(10),
   }
 }
-

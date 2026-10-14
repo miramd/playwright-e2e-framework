@@ -1,15 +1,16 @@
 import { test as base, expect } from '@playwright/test'
-import { generateUser } from '../utils/test-data'
+import { generateUser, NewUser } from '../utils/test-data'
 
-type TestUser = { name: string; email: string; password: string }
-
-export const test = base.extend<{ apiUser: TestUser }>({
- 
-  // runs for every test that uses `page`
+export const test = base.extend<{ apiUser: NewUser }>({
+  // block ad requests so the Google ad interstitial can't intercept clicks
   page: async ({ page }, use) => {
-    await page.route(/googlesyndication|doubleclick|googleadservices|adservice\.google/, route => route.abort())
+    await page.route(
+      /googlesyndication|doubleclick|googleadservices|adservice\.google/,
+      route => route.abort()
+    )
     await use(page)
   },
+
   apiUser: async ({ request }, use) => {
     const u = generateUser()
 
@@ -37,7 +38,7 @@ export const test = base.extend<{ apiUser: TestUser }>({
     })
     expect((await res.json()).responseCode).toBe(201)
 
-    await use({ name: u.name, email: u.email, password: u.password })
+    await use(u)
 
     // Teardown: delete the account (harmless if the test already deleted it)
     await request.delete('/api/deleteAccount', {
