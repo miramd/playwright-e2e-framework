@@ -56,3 +56,42 @@ test('delete account, then try to login with the same credentials', async ({ pag
     await loginPage.loginToYourAccount(apiUser.email, apiUser.password)
     await expect(page.getByText('Your email or password is incorrect!')).toBeVisible();
 });
+
+test('Register with an invalid email format', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+    await page.getByPlaceholder('Name').fill('Random')
+    await page.getByPlaceholder('Email Address').nth(1).fill('hi')
+    await page.getByTestId('signup-button').click()
+
+});
+
+test('Register with an invalid email format is blocked', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+    await loginPage.goto()
+
+    const emailInput = page.getByTestId('signup-email')
+    await page.getByTestId('signup-name').fill('Mira Test')
+    await emailInput.fill('not-an-email')
+    await page.getByTestId('signup-button').click()
+
+    // the browser blocked the submit: still on the login page, no signup form shown
+    await expect(page).toHaveURL(/login/)
+    await expect(page.getByText('Enter Account Information')).not.toBeVisible()
+
+    // the field itself reports why
+    const typeMismatch = await emailInput.evaluate((el: HTMLInputElement) => el.validity.typeMismatch)
+    expect(typeMismatch).toBe(true)
+})
+
+test('Register with a missing name is blocked', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+    await loginPage.goto()
+
+    const nameInput = page.getByTestId('signup-name')
+    await page.getByTestId('signup-email').fill('someone@example.com')
+    await page.getByTestId('signup-button').click()
+
+    await expect(page).toHaveURL(/login/)
+    const valueMissing = await nameInput.evaluate((el: HTMLInputElement) => el.validity.valueMissing)
+    expect(valueMissing).toBe(true)
+})
