@@ -7,7 +7,8 @@ import { test, expect } from '../fixtures/api-user'
 
 
 test.beforeEach(async ({page}) => {
-    await new ProductsPage(page).goto()
+const productsPage = new ProductsPage(page)
+await page.goto('/products')
 })
 
 test('View all products and open a product detail page ', async ({ page, request }) => {
@@ -114,12 +115,17 @@ test('remove a product from the cart', async ({ page }) => {
     const rows = page.locator('#cart_info_table tbody tr')
     await expect(rows).toHaveCount(2)
 
-    // remove the first product by clicking the X on its row
-    await page.locator('.cart_quantity_delete').first().click()  // verify locator in codegen
+    const row = rows.filter({ hasText: first })
 
-    await expect(rows).toHaveCount(1)
-    await expect(page.locator('#cart_info_table')).not.toContainText(first)
-    await expect(page.locator('#cart_info_table')).toContainText(second)
+await expect(async () => {
+    if (await row.count() > 0) {
+        await row.locator('.cart_quantity_delete').click()
+    }
+    await expect(rows).toHaveCount(1, { timeout: 5000 })
+}).toPass({ timeout: 30_000 })
+
+await expect(page.locator('#cart_info_table')).not.toContainText(first)
+await expect(page.locator('#cart_info_table')).toContainText(second)
 })
 
 test('Cart items persist after login', async ({ page, apiUser }) => {

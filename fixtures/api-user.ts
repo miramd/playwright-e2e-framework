@@ -3,13 +3,13 @@ import { generateUser, NewUser } from '../utils/test-data'
 
 export const test = base.extend<{ apiUser: NewUser }>({
   // block ad requests so the Google ad interstitial can't intercept clicks
-  page: async ({ page }, use) => {
-    await page.route(
-      /googlesyndication|doubleclick|googleadservices|adservice\.google/,
-      route => route.abort()
-    )
-    await use(page)
-  },
+  // page: async ({ page }, use) => {
+  //   await page.route(
+  //     /googlesyndication|doubleclick|googleadservices|adservice\.google/,
+  //     route => route.abort()
+  //   )
+  //   await use(page)
+  // },
 
   apiUser: async ({ request }, use) => {
     const u = generateUser()
