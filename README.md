@@ -18,7 +18,10 @@ The base scenarios come from the site's published test case list. I selected, ex
 | **API** | Products list endpoint, `verifyLogin` with valid and invalid credentials |
 
 The full list with IDs (TC01 to TC22) is in [`test-plan.md`](test-plan.md).
+   ## Test report
 
+   ![Playwright HTML report](docs/report.png)
+   
 ## Design highlights
 
 - **UI + API combined.** A custom `apiUser` fixture creates a user through the API before the test and deletes it afterwards. Tests that need an existing account skip the slow UI registration, and nothing is left behind.
@@ -52,7 +55,7 @@ Requires Node.js 18 or later.
 git clone https://github.com/miramd/playwright-e2e-framework.git
 cd playwright-e2e-framework
 npm ci
-npx playwright install chromium
+npx playwright install 
 npx playwright test
 ```
 
@@ -66,7 +69,7 @@ npx playwright show-report            # open the HTML report
 
 ## Continuous integration
 
-Every push to `main` runs the suite on GitHub Actions. The HTML report, including traces for any failures, is attached to each run as an artifact (Actions tab, then the run, then Artifacts).
+Every push to `main` runs the suite on GitHub Actions. The HTML report, including traces for any failures, is attached to each run as an artifact (Actions tab, then the run, then Artifacts). CI runs on chromium, webkit and firefox.
 
 ## Notes
 
