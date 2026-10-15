@@ -26,7 +26,8 @@ export class ProductsPage {
   }
 
   async addToCart(productID:number,quantity:number){
-   await this.page.goto(`/product_details/${productID}`)
+  await this.page.goto(`/product_details/${productID}`, { waitUntil: 'domcontentloaded' })
+   await this.page.locator('.product-information h2').waitFor({ timeout: 30_000 })
    const name = (await this.page.locator('.product-information h2').innerText()).trim()
     await this.page.locator('#quantity').fill(String(quantity))   // verify locator in codegen
 
