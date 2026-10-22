@@ -25,8 +25,8 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
-          docker:
+  docker:          # new job, same indent level as "test"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: docker build -t pw-tests .
