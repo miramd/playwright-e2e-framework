@@ -71,6 +71,10 @@ npx playwright show-report            # open the HTML report
 
 Every push to `main` runs the suite on GitHub Actions. The HTML report, including traces for any failures, is attached to each run as an artifact (Actions tab, then the run, then Artifacts). CI runs on chromium, webkit and firefox.
 
+## Run with Docker
+docker build -t pw-tests .
+docker run --rm --ipc=host -v "$(pwd)/playwright-report:/app/playwright-report" pw-tests npx playwright test --project=chromium --workers=2
+
 ## Notes
 
 - The target site is a public practice application, so tests only use throwaway accounts and dummy payment data.
