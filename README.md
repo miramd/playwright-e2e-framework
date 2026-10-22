@@ -1,6 +1,5 @@
 # Playwright E2E Framework
-
-![Playwright Tests](https://github.com/miramd/playwright-e2e-framework/actions/workflows/playwright.yml/badge.svg)
+[![Playwright Tests](https://github.com/miramd/playwright-e2e-framework/actions/workflows/playwright.yml/badge.svg)](https://github.com/miramd/playwright-e2e-framework/actions/workflows/playwright.yml)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
 
 End-to-end test automation framework for [Automation Exercise](https://automationexercise.com), a public e-commerce practice site. Built with **Playwright** and **TypeScript**, using the **Page Object Model**, API-driven test setup, and **GitHub Actions** CI.
